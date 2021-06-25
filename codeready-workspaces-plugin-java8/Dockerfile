@@ -110,6 +110,8 @@ RUN \
         cp -R /tmp/py-unpack/bin/* /usr/bin && \
         cp -R /tmp/py-unpack/lib/* /usr/lib && \
         cp -R /tmp/py-unpack/lib64/* /usr/lib64 && \
+        cp -R /tmp/py-unpack/.venv "${HOME}/.venv-tmp" && \
+        chgrp -R 0 "${HOME}/.venv-tmp" && chmod -R g+rwX "${HOME}/.venv-tmp" && \
         rm -fr /tmp/py-unpack \
     else \
         echo "[WARNING] Python lang server dependency tarball not found. Python support may be more limited on $(uname -m)"; \

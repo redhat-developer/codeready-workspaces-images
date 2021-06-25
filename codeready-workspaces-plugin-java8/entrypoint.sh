@@ -27,4 +27,14 @@ if ! grep -Fq "${USER_ID}" /etc/passwd; then
     sed "s/\${HOME}/\/home\/jboss/g" > /etc/group
 fi
 
+# Setup .venv in the 'venv' volume that should be mounted in HOME/.venv
+mkdir -p "${HOME}"/.venv
+if [ ! -f "${HOME}"/.venv/bin/activate ]; then
+  echo "${HOME}"/.venv is empty, moving files from "${HOME}"/.venv-tmp/
+  mv "${HOME}"/.venv-tmp/* "${HOME}"/.venv
+fi
+
+# shellcheck source=/dev/null
+source "${HOME}"/.venv/bin/activate
+
 exec "$@"
