@@ -27,8 +27,8 @@
         - name: Get imported image registry URL
           shell: oc get is {{ image_name }} --output=jsonpath='{ .status.dockerImageRepository }'
           register: imported_image_url
-        - name: Start a dummy {{ image_namespace }}/{{ image_name }}:{{ image_tag }} container
-          shell: oc run yq-cmd-test -i --image={{ imported_image_url.stdout }} --command -- bash
+        - name: Start a dummy {{ image_namespace }}/{{ image_name }}:{{ image_tag }} container, wait 3m for pod to die before test fails
+          shell: oc run yq-cmd-test -i --image={{ imported_image_url.stdout }} --pod-running-timeout=3m --command -- bash
         - name: Figure out a pod name for the started container
           shell: oc get pods --selector deploymentconfig=yq-cmd-test --output=jsonpath='{ .items[*].metadata.name }'
           register: pod_name
